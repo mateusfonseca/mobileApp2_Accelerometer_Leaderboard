@@ -1,19 +1,19 @@
-import auth from "@react-native-firebase/auth";
-import { ActivityIndicator, Button, Text, TextInput, ToastAndroid, View } from "react-native";
+// This file defines the DataForm component of the application.
+// It renders a form that collects extra details from the newly created user
+// immediately after registration. It may be skipped as details can be updated later.
+
+import { Button, Text, TextInput, View } from "react-native";
 import { useState } from "react";
-import firestore from "@react-native-firebase/firestore";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { onSignIn } from "./SignIn";
+import { useNavigation } from "@react-navigation/native";
 import { updateDetails } from "./AccountDetails";
 
-export default function DataForm({route}) {
-  const emailDomain = "@student.dorset-college.ie";
-  const navigation = useNavigation();
+// Component DataForm
+export default function DataForm({ route }) { // route prop from SignUp
+  const navigation = useNavigation(); // navigation prop from SignUp
 
-  const [user, setUser] = useState({name: "", course: "", year: 0});
+  const [user, setUser] = useState({ name: "", course: "", year: 0 });
 
-  console.log(navigation.getState().routes)
-
+  // data form
   return (
     <View style={{ padding: 20, alignSelf: "center", minWidth: 300 }}>
       <TextInput style={{ padding: 1, textAlign: "center" }}
@@ -31,18 +31,14 @@ export default function DataForm({route}) {
       <Button
         title={"Submit"}
         onPress={() => {
-          // console.log(user.name)
-          // console.log(user.course)
-          // console.log(user.year)
-          // console.log(route.params.id)
-          updateDetails(user, route.params.id);
-          navigation.navigate("Main");
+          updateDetails(user, route.params.id); // update details to the database
+          navigation.navigate("Main"); // goes to Main page after registration
         }}
       />
       <Text />
       <Button
         title={"Not now"}
-        onPress={() => navigation.navigate("Main") }
+        onPress={() => navigation.navigate("Main")} // goes to Main page after registration
       />
     </View>
   );

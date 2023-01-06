@@ -1,6 +1,11 @@
+// This file defines the Main component of the application.
+// It renders the main screen with its two tabs, tracks app visibility
+// (whether it's in foreground or background), collects the accelerometer
+// data and uploads them to the database.
+
 import React, { useEffect, useRef, useState } from "react";
-import { AppState, StyleSheet, View } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { AppState, View } from "react-native";
+import { useRoute } from "@react-navigation/native";
 import Leaderboard from "./Leaderboard";
 import AccountDetails from "./AccountDetails";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -8,27 +13,24 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { accelerometer, SensorTypes, setUpdateIntervalForType } from "react-native-sensors";
 import firestore from "@react-native-firebase/firestore";
 
+// Component Main
 export default function Main() {
+  const route = useRoute(); // route prop from App
+  const appState = useRef(AppState.currentState); // get reference to app's current state
 
-  // console.log(route.params.user)
-  const route = useRoute();
-
-  // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState(null);
-  const [email, setEmail] = useState(route.params.userEmail);
-  const [password, setPassword] = useState(null);
-  const [update, setUpdate] = useState(false);
-  const navigation = useNavigation();
-
-  const appState = useRef(AppState.currentState);
+  const [email] = useState(route.params.userEmail);
+  const [update, setUpdate] = useState(false); // updates Leaderboard content when user details change
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  const [accData, setAccData] = useState([]); // tracks accelerometer data collection
+  const [counter, setCounter] = useState(0); // tracks accelerometer sample quantity
+
+  // updates app state when switched back-and-forth between FG and BG
   useEffect(
     () => {
       const subscription = AppState.addEventListener("change", nextAppState => {
         appState.current = nextAppState;
         setAppStateVisible(appState.current);
-        console.log("AppState: " + appStateVisible);
+        // console.log("AppState: " + appStateVisible);
       });
       return () => {
         subscription.remove();
@@ -37,16 +39,7 @@ export default function Main() {
     [],
   );
 
-  useEffect(
-    () => {
-      if (appStateVisible === "active")
-        console.log("I am active");
-      else
-        console.log("I am background");
-    },
-    [appStateVisible],
-  );
-
+  // uploads collected accelerometer data to the database
   async function uploadAccData(data) {
     firestore()
       .collection("Users")
@@ -59,42 +52,38 @@ export default function Main() {
       });
   }
 
-  // alpha = t / (t + dT)
-  let t = 800;
-  let dT = 100;
-  let alpha = t / (t + dT);
+  // Formula: α = t / (t + dT)
+  let t = 800; // low-pass filter's time-constant in ms
+  let dT = 100; // event delivery rate in ms
+  let alpha = t / (t + dT); // alpha factor
   let gravity = [0, 0, 0];
-  const [accData, setAccData] = useState([]);
-  const [counter, setCounter] = useState(0);
-  // let accData = [];
-  // let counter = 0;
+
+  // collects accelerometer data, watches app visibility so that it
+  // stops reading when in BG and resumes and in FG
   useEffect(
     () => {
       let accDt = accData;
       let cnt = counter;
       if (appStateVisible === "active") {
+        // sets time interval for data reading
         setUpdateIntervalForType(SensorTypes.accelerometer, dT); // defaults to 100ms
         const subscription = accelerometer
           .subscribe(({ x, y, z }) => {
-            // console.log("Before: ");
-            // console.log({ x, y, z });
 
+            // low-pass filter isolates the force of gravity on each axis
             gravity[0] = alpha * gravity[0] + (1 - alpha) * x;
             gravity[1] = alpha * gravity[1] + (1 - alpha) * y;
             gravity[2] = alpha * gravity[2] + (1 - alpha) * z;
-            x = (x - gravity[0]).toFixed(2);
-            y = (y - gravity[1]).toFixed(2);
-            z = (z - gravity[2]).toFixed(2);
 
-            // setAccData(prevState => {
-            //   return [...prevState, ...[{ x, y, z }]];
-            // });
-            // setCounter(prevCounter => prevCounter + 1);
+            // high-pass filter removes gravity contribution
+            x = (x - gravity[0]);
+            y = (y - gravity[1]);
+            z = (z - gravity[2]);
 
-            accDt.push({x, y, z});
-            cnt++;
-            console.log("Counter: " + cnt);
+            accDt.push({ x, y, z }); // updates data array with newly collected reading
+            cnt++; // increments counter
 
+            // when 1000 data samples have been collected, upload to the database and start over
             if (cnt === 1000) {
               uploadAccData(accDt).catch(error => console.log(error));
               accDt = [];
@@ -102,9 +91,6 @@ export default function Main() {
               setAccData([]);
               setCounter(0);
             }
-
-            // console.log("After: ");
-            // console.log({ x, y, z });
           });
         return () => {
           setAccData(accDt);
@@ -116,38 +102,11 @@ export default function Main() {
     [appStateVisible],
   );
 
-  // useEffect(
-  //   () => {
-  //     if (counter > 999) {
-  //       console.log(`Finally! Counter is: ${counter}`);
-  //       console.log(accData);
-  //       firestore()
-  //         .collection("Users")
-  //         .doc(userId)
-  //         .update({
-  //           accelerometer_data: accData,
-  //         })
-  //         .then(() => {
-  //           console.log("User updated!");
-  //         });
-  //       setCounter(0);
-  //       setAccData([]);
-  //     } else {
-  //       console.log(`Counter is: ${counter}`);
-  //       console.log(accData);
-  //     }
-  //   },
-  //   [upload],
-  // );
+  const Tab = createMaterialTopTabNavigator(); // tabs navbar
+  const userId = email.substring(0, email.indexOf("@")); // get user ID from email
 
-  const userEmail = email;
-  console.log("Email here: " + userEmail);
-  const userId = userEmail.substring(0, userEmail.indexOf("@"));
-
-  const Tab = createMaterialTopTabNavigator();
-
+  // tabs navbar stack
   return (
-    // <PagerView style={styles.pagerView} initialPage={route.params.page}>
     <View style={{ flex: 1 }}>
       <Tab.Navigator
         initialRouteName="Leaderboard"
@@ -158,7 +117,7 @@ export default function Main() {
       >
         <Tab.Screen
           name="Leaderboard"
-          children={() => <Leaderboard value={update} />}
+          children={() => <Leaderboard value={update} />} // updates display if user details change
           initialParams={{ userId }}
           options={() => ({
             tabBarLabel: "Leaderboard",
@@ -174,8 +133,8 @@ export default function Main() {
         />
         <Tab.Screen
           name="Account Details"
-          children={() => <AccountDetails value={update} onChangeValue={(newValue) => setUpdate(newValue)} />}
-          initialParams={{ userEmail, userId }}
+          children={() => <AccountDetails value={update} onChangeValue={(newValue) => setUpdate(newValue)} />} // requests update display if user details change
+          initialParams={{ email, userId }}
           options={() => ({
             tabBarLabel: "Account Details",
             tabBarIcon: ({ focused, color }) => {
@@ -188,33 +147,7 @@ export default function Main() {
             },
           })}
         />
-        {/*<Tab.Screen name={"Account Details"} component={} />*/}
       </Tab.Navigator>
-      {/*<View key="1">*/}
-      {/*  <Leaderboard />*/}
-      {/*  /!*<Text>Leaderboard</Text>*!/*/}
-      {/*</View>*/}
-      {/*<View key="2">*/}
-      {/*  <AccountDetails userData={{ email: userEmail, id: userId }} />*/}
-      {/*  /!*<Text>AccountDetails</Text>*!/*/}
-      {/*</View>*/}
     </View>
-
-    // </PagerView>
   );
-
-  // return (
-  //   <View>
-  //     <Text>Welcome {user.email}</Text>
-  //     <Button title={"Account Details"} onPress={() => navigation.navigate("Account Details", { userEmail })}
-  //     />
-  //     <Leaderboard />
-  //   </View>
-  // );
 }
-
-const styles = StyleSheet.create({
-  pagerView: {
-    flex: 1,
-  },
-});

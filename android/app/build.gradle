@@ -321,6 +321,7 @@ def isNewArchitectureEnabled() {
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
 
+// Gives Android access to the vector icons from react-native-vector-icons package
 project.ext.vectoricons = [
     iconFontNames: ['MaterialCommunityIcons.ttf']
 ]

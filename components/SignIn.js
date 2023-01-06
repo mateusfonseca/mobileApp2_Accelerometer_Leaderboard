@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Button, TextInput, AppState, Dimensions, ToastAndroid } from "react-native";
+// This file defines the SignIn component of the application.
+// It renders a component that displays a simple sign-in form which
+// the user can use to log-into the application with an email address
+// and a password.
+
+import React, { useState } from "react";
+import { Button, Text, TextInput, ToastAndroid, View } from "react-native";
 import auth from "@react-native-firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import { accelerometer, SensorTypes, setUpdateIntervalForType } from "react-native-sensors";
-import firestore from "@react-native-firebase/firestore";
-import { FlashList } from "@shopify/flash-list";
-import Leaderboard from "./Leaderboard";
 
-export function onSignIn(email, password) {
+// Authenticates user against data stored in the database.
+function onSignIn(email, password) {
   auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => {
@@ -26,18 +28,18 @@ export function onSignIn(email, password) {
     });
 }
 
+// Component SignIn
 export default function SignIn() {
   const emailDomain = "@student.dorset-college.ie";
-  const navigation = useNavigation()
+  const navigation = useNavigation(); // navigation prop from App
 
   const [id, setId] = useState(null);
   const [password, setPassword] = useState(null);
 
-  console.log(navigation.getState().routeNames)
-
+  // sign-in form
   return (
     <View style={{ padding: 20, alignSelf: "center", minWidth: 300 }}>
-      <View style={{ flexDirection: "row"}}>
+      <View style={{ flexDirection: "row" }}>
         <TextInput
           placeholder={"Student ID"}
           onChangeText={setId}

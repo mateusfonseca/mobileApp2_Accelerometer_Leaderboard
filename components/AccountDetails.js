@@ -1,9 +1,15 @@
+// This file defines the AccountDetails component of the application.
+// It renders a screen that displays the currently logged-in user's details
+// and lets the user change them, and allows signing-out.
+
 import firestore from "@react-native-firebase/firestore";
 import { ActivityIndicator, Button, Image, Text, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import auth from "@react-native-firebase/auth";
 
+// Updates user details to the database.
+// It is exported so that it can be called in the DataForm component too.
 export function updateDetails(user, userId) {
   firestore()
     .collection("Users")
@@ -18,27 +24,19 @@ export function updateDetails(user, userId) {
     });
 }
 
-export default function AccountDetails(props) {
+// Component AccountDetails
+export default function AccountDetails(props) { // props from Main
   const emailDomain = "@student.dorset-college.ie";
+  const route = useRoute(); // route prop from Main
 
-  const route = useRoute();
-  console.log("AccountDetails route: " + props.value);
-  const [userEmail, setUserEmail] = useState(route.params.userEmail);
-  const [userId, setUserId] = useState(route.params.userId);
+  const [userId] = useState(route.params.userId);
   const [user, setUser] = useState(null);
-  const [change, setChange] = useState(null);
-  const [updateMode, setUpdateMode] = useState(false);
-  const [update, setUpdate] = useState(props.value);
+  const [change, setChange] = useState(null); // tracks changes to user details as they happen
+  const [updateMode, setUpdateMode] = useState(false); // tracks display type mode
+  const [update, setUpdate] = useState(props.value); // tracks whether content has changed and needs be updated
 
-  // console.log("Here!!!" + userEmail)
-  // console.log("Here!!!" + userId)
-  if (user) console.log("ACC1: " + user.name);
-  if (change) console.log("ACC2: " + change.name);
-  if (user) console.log("ACC3: " + props.value);
-  if (change) console.log("ACC4: " + update);
-
-  // const userId = user.email.substring(0, user.email.indexOf("@"));
-
+  // fetches users details from the database and watches for local changes
+  // which, once submitted, can be re-fetched to update the display
   useEffect(() => {
     const fetchUserDoc = async () => {
       await firestore().collection("Users").doc(userId).get()
@@ -49,7 +47,6 @@ export default function AccountDetails(props) {
             console.log("User data: ", documentSnapshot.data());
             setUser(documentSnapshot.data());
             setChange(documentSnapshot.data());
-            // setUpdate(!update);
           }
         });
     };
@@ -57,7 +54,7 @@ export default function AccountDetails(props) {
     fetchUserDoc().catch(console.error);
   }, [update]);
 
-  if (updateMode) {
+  if (updateMode) { // if in update mode, allow text input
     return (
       <View style={{ padding: 20, alignSelf: "center", minWidth: 300 }}>
         {!user ? <ActivityIndicator style={{ flex: 1 }} size={"large"} /> : (
@@ -77,22 +74,22 @@ export default function AccountDetails(props) {
             <Button
               title={"Save Changes"}
               onPress={() => {
-                props.onChangeValue(!update);
-                setUpdate(!update);
-                updateDetails(change, userId);
-                setUpdateMode(false);
+                props.onChangeValue(!update); // send update signal back to Main
+                setUpdate(!update); // turns on update signal
+                updateDetails(change, userId); // updates to database
+                setUpdateMode(false); // leaves update mode
               }}
             />
             <Text />
             <Button title={"Cancel"} onPress={() =>
-              setUpdateMode(false)
+              setUpdateMode(false) // leaves update mode
             }
             />
           </View>
         )}
       </View>
     );
-  } else {
+  } else { // if not in update mode, only display
     return (
       <View style={{ padding: 20, alignSelf: "center", minWidth: 300 }}>
         {!user ? <ActivityIndicator style={{ flex: 1 }} size={"large"} /> : (
@@ -107,7 +104,7 @@ export default function AccountDetails(props) {
             <Button
               title={"Update Details"}
               onPress={() => {
-                setUpdateMode(true);
+                setUpdateMode(true); // enters update mode
               }}
             />
             <Text />
@@ -121,5 +118,4 @@ export default function AccountDetails(props) {
       </View>
     );
   }
-
 }
