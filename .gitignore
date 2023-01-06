@@ -64,4 +64,4 @@ buck-out/
 /vendor/bundle/
 
 # Firebase Admin SDK
-/adm.mjs
+/.firebase-admin.mjs
