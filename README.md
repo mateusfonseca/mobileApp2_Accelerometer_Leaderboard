@@ -19,8 +19,8 @@ This repository contains an "Accelerometer Leaderboard" React Native app develop
 
 ## Part 1: Requirements Checklist
 
-- [x] **1. Authenticate using Firebase1, upload data to Firestore**
-  - [x] 1.1. Sign up using <span>StudentID@student.dorset-college.ie</span> (as email) and a password
+- [x] **1. Authenticate using Firebase, upload data to Firestore**
+  - [x] 1.1. Sign up using StudentID@student.<span>dorset-college</span>.ie (as email) and a password
   - [x] 1.2. After sign up, collect and update details such as name, course, year in Firestore > StudentID, allow editing these details later
   - [x] 1.3. Collect and store locally 1000 accelerometer data points
   - [x] 1.4. Once 1000 data points are collected, upload to Firestore under: Users > StudentID > accelerometer_data
