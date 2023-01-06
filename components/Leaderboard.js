@@ -106,7 +106,7 @@ export default function Leaderboard(props) { // props from Main
               <View
                 style={[
                   { flexDirection: "row" },
-                  index % 2 === 0 ? { backgroundColor: "tomato" } : { backgroundColor: "auto" },
+                  index % 2 === 0 ? { backgroundColor: "tomato" } : { backgroundColor: "transparent" },
                   item.id === userId ? { backgroundColor: "green" } : null, // greens current user
                 ]}>
                 <Text style={{ flex: 1, textAlign: "center" }}>{index + 1}</Text>
