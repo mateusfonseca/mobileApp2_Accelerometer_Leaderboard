@@ -38,7 +38,37 @@ This repository contains an "Accelerometer Leaderboard" React Native app develop
 
 ## Part 3: References
 
+Conceptually, every line of code in this project was written based on official documentation:
 
+- **[React Native](https://reactnative.dev/docs/getting-started)**
+- **[React Native Firebase](https://rnfirebase.io/)**
+- **[React](https://reactjs.org/docs/getting-started.html)**
+- **[React Docs BETA](https://beta.reactjs.org/)**
+- **[React Navigation](https://reactnavigation.org/docs/getting-started/)**
+- **[MDN Web](https://developer.mozilla.org/)**
+- **[RxJS](https://rxjs-dev.firebaseapp.com/)**
+- **[Firebase](https://firebase.google.com/docs)**
+- **[Android](https://developer.android.com/docs)**
+- **[FlashList](https://shopify.github.io/flash-list/docs/)**
+
+The following NPM packages were installed:
+
+- **[@react-native-firebase](https://www.npmjs.com/package/react-native-firebase)**
+- **[@react-navigation/native](https://www.npmjs.com/package/@react-navigation/native)**
+- **[@shopify/flash-list](https://www.npmjs.com/package/@shopify/flash-list)**
+- **[firebase-admin](https://www.npmjs.com/package/firebase-admin)**
+- **[react-native-paper](https://www.npmjs.com/package/react-native-paper)**
+- **[react-native-screens](https://www.npmjs.com/package/react-native-screens)**
+- **[react-native-sensors](https://www.npmjs.com/package/react-native-sensors)**
+- **[react-native-vector-icons](https://www.npmjs.com/package/react-native-vector-icons)**
+- **[rxjs](https://www.npmjs.com/package/rxjs)**
+
+
+Clarifying code snippets from **[W3Schools](https://www.w3schools.com/)**.
+
+Visits to our most beloved **[StackOverflow](https://stackoverflow.com/)** certainly happened, for insight and understanding.
+
+All user pictures from **[This Person Does Not Exist](https://thispersondoesnotexist.com/)**.
 
 ## Part 4: Copyright Disclaimer
 
