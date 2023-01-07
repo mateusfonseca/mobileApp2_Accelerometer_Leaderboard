@@ -6,6 +6,7 @@ import { Button, Text, TextInput, View } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { updateDetails } from "./AccountDetails";
+import { styles } from "../App";
 
 // Component DataForm
 export default function DataForm({ route }) { // route prop from SignUp
@@ -16,19 +17,25 @@ export default function DataForm({ route }) { // route prop from SignUp
   // data form
   return (
     <View style={{ padding: 20, alignSelf: "center", minWidth: 300 }}>
-      <TextInput style={{ padding: 1, textAlign: "center" }}
+      <TextInput style={styles.textInput}
+                 cursorColor={"navy"}
                  placeholder={"Name"}
                  onChangeText={val => setUser({ ...user, name: val })}
       />
-      <TextInput style={{ padding: 1, textAlign: "center" }}
+      <TextInput style={styles.textInput}
+                 cursorColor={"navy"}
                  placeholder={"Course"}
                  onChangeText={val => setUser({ ...user, course: val })}
       />
-      <TextInput style={{ padding: 1, paddingBottom: 19, textAlign: "center" }}
+      <TextInput style={styles.textInput}
+                 cursorColor={"navy"}
+                 keyboardType={"numeric"}
                  placeholder={"Year"}
                  onChangeText={val => setUser({ ...user, year: Number(val) })}
       />
+      <Text />
       <Button
+        color={"navy"}
         title={"Submit"}
         onPress={() => {
           updateDetails(user, route.params.id); // update details to the database

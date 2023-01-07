@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { Button, Text, TextInput, ToastAndroid, View } from "react-native";
 import auth from "@react-native-firebase/auth";
 import { useNavigation } from "@react-navigation/native";
+import { styles } from "../App";
 
 // Authenticates user against data stored in the database.
 function onSignIn(email, password) {
@@ -41,19 +42,26 @@ export default function SignIn() {
     <View style={{ padding: 20, alignSelf: "center", minWidth: 300 }}>
       <View style={{ flexDirection: "row" }}>
         <TextInput
+          cursorColor={"navy"}
+          style={styles.textInput}
+          keyboardType={"numeric"}
           placeholder={"Student ID"}
           onChangeText={setId}
         />
-        <Text style={{ textAlignVertical: "center" }}>
+        <Text style={styles.emailDomain}>
           {emailDomain}
         </Text>
       </View>
       <TextInput
+        cursorColor={"navy"}
+        style={styles.textInput}
         placeholder={"Password"}
         secureTextEntry={true}
         onChangeText={setPassword}
       />
+      <Text />
       <Button
+        color={"navy"}
         title={"Sign In"}
         onPress={() => {
           if (!id || !password || isNaN(id))

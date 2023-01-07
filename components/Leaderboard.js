@@ -92,10 +92,10 @@ export default function Leaderboard(props) { // props from Main
   // leaderboard
   return (
     <View style={{ width: "100%", height: "100%" }}>
-      <View style={{ padding: 20, backgroundColor: "tomato", flexDirection: "row" }}>
-        <Text style={{ flex: 1, textAlign: "center" }}>Rank</Text>
-        <Text style={{ flex: 5, textAlign: "center" }}>Name</Text>
-        <Text style={{ flex: 1, textAlign: "center" }}>Score</Text>
+      <View style={{ padding: 20, backgroundColor: "#2196f3", flexDirection: "row" }}>
+        <Text style={{ flex: 1, textAlign: "center", color: "white", fontWeight: "bold" }}>RANK</Text>
+        <Text style={{ flex: 5, textAlign: "center", color: "white", fontWeight: "bold" }}>NAME</Text>
+        <Text style={{ flex: 1, textAlign: "center", color: "white", fontWeight: "bold" }}>SCORE</Text>
       </View>
       {users.length === 0 ? <ActivityIndicator style={{ flex: 1 }} size={"large"} /> : (
         <FlashList
@@ -106,15 +106,27 @@ export default function Leaderboard(props) { // props from Main
               <View
                 style={[
                   { flexDirection: "row" },
-                  index % 2 === 0 ? { backgroundColor: "tomato" } : { backgroundColor: "transparent" },
-                  item.id === userId ? { backgroundColor: "green" } : null, // greens current user
+                  index % 2 === 0 ? { backgroundColor: "lightgray" } : { backgroundColor: "transparent" },
+                  item.id === userId ? { backgroundColor: "#2196f3" } : null, // highlights current user
                 ]}>
-                <Text style={{ flex: 1, textAlign: "center" }}>{index + 1}</Text>
-                <Text style={{ flex: 5, textAlign: "center" }}>{item.name}</Text>
+                <Text style={[{ flex: 1, textAlign: "center" }, item.id === userId ? { // highlights current user
+                  color: "white",
+                  fontWeight: "bold",
+                } : null]}>{index + 1}</Text>
+                <Text style={[{ flex: 5, textAlign: "center" }, item.id === userId ? { // highlights current user
+                  color: "white",
+                  fontWeight: "bold",
+                } : null]}>{item.name}</Text>
                 {item.score < 0 ? (
-                  <Text style={{ flex: 1, textAlign: "center" }}>N/A</Text> // if calculateScore returned -1
+                  <Text style={[{ flex: 1, textAlign: "center" }, item.id === userId ? { // highlights current user
+                    color: "white",
+                    fontWeight: "bold",
+                  } : null]}>N/A</Text> // if calculateScore returned -1
                 ) : (
-                  <Text style={{ flex: 1, textAlign: "center" }}>{item.score}</Text>
+                  <Text style={[{ flex: 1, textAlign: "center" }, item.id === userId ? { // highlights current user
+                    color: "white",
+                    fontWeight: "bold",
+                  } : null]}>{item.score}</Text>
                 )}
               </View>
             </TouchableOpacity>
@@ -122,9 +134,9 @@ export default function Leaderboard(props) { // props from Main
           estimatedItemSize={200} // helps FlashList manage memory when recycling
         />
       )}
-      <View style={{ padding: 20, backgroundColor: "tomato", flexDirection: "row" }}>
-        <Text style={{ flex: 1, textAlign: "center" }}>Last refreshed {timer}s ago</Text>
-        <Text style={{ flex: 1, textAlign: "center" }}>Refreshing in {60 - timer}s</Text>
+      <View style={{ padding: 20, backgroundColor: "#2196f3", flexDirection: "row" }}>
+        <Text style={{ flex: 1, textAlign: "center", color: "white" }}>Last refreshed {timer}s ago</Text>
+        <Text style={{ flex: 1, textAlign: "center", color: "white" }}>Refreshing in {60 - timer}s</Text>
       </View>
     </View>
   );

@@ -7,6 +7,7 @@ import { ActivityIndicator, Button, Image, Text, TextInput, View } from "react-n
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import auth from "@react-native-firebase/auth";
+import { styles } from "../App";
 
 // Updates user details to the database.
 // It is exported so that it can be called in the DataForm component too.
@@ -59,19 +60,25 @@ export default function AccountDetails(props) { // props from Main
       <View style={{ padding: 20, alignSelf: "center", minWidth: 300 }}>
         {!user ? <ActivityIndicator style={{ flex: 1 }} size={"large"} /> : (
           <View>
-            <TextInput style={{ padding: 1, textAlign: "center" }}
-                       placeholder={user.name}
+            <TextInput style={styles.textInput}
+                       cursorColor={"navy"}
+                       placeholder={"Name: " + user.name}
                        onChangeText={val => setChange({ ...change, name: val })}
             />
-            <TextInput style={{ padding: 1, textAlign: "center" }}
-                       placeholder={user.course}
+            <TextInput style={styles.textInput}
+                       cursorColor={"navy"}
+                       placeholder={"Course: " + user.course}
                        onChangeText={val => setChange({ ...change, course: val })}
             />
-            <TextInput style={{ padding: 1, paddingBottom: 19, textAlign: "center" }}
-                       placeholder={user.year.toString()}
+            <TextInput style={styles.textInput}
+                       cursorColor={"navy"}
+                       keyboardType={"numeric"}
+                       placeholder={"Year: " + user.year.toString()}
                        onChangeText={val => setChange({ ...change, year: Number(val) })}
             />
+            <Text />
             <Button
+              color={"navy"}
               title={"Save Changes"}
               onPress={() => {
                 props.onChangeValue(!update); // send update signal back to Main
@@ -96,12 +103,13 @@ export default function AccountDetails(props) { // props from Main
           <View>
             <Image source={{ uri: "https://thispersondoesnotexist.com/image" }}
                    style={{ width: 200, height: 200, borderRadius: 200 / 2, marginBottom: 10, alignSelf: "center" }} />
-            <Text style={{ paddingBottom: 5, textAlign: "center" }}>{user.name}</Text>
-            <Text style={{ paddingBottom: 5, textAlign: "center" }}>ID {userId}</Text>
+            <Text style={{ paddingBottom: 5, textAlign: "center", fontWeight: "bold", fontSize: 18 }}>{user.name}</Text>
+            <Text style={{ paddingBottom: 5, textAlign: "center", fontWeight: "bold", fontSize: 16 }}>ID {userId}</Text>
             <Text style={{ paddingBottom: 5, textAlign: "center" }}>{userId + emailDomain}</Text>
             <Text style={{ paddingBottom: 5, textAlign: "center" }}>{user.course}</Text>
             <Text style={{ paddingBottom: 20, textAlign: "center" }}>Year {user.year}</Text>
             <Button
+              color={"navy"}
               title={"Update Details"}
               onPress={() => {
                 setUpdateMode(true); // enters update mode

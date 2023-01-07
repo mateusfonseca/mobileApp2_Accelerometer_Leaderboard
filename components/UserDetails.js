@@ -39,8 +39,8 @@ export default function UserDetails() {
         <View>
           <Image source={{ uri: "https://thispersondoesnotexist.com/image?" + new Date() }}
                  style={{ width: 200, height: 200, borderRadius: 200 / 2, marginBottom: 10, alignSelf: "center" }} />
-          <Text style={{ paddingBottom: 5, textAlign: "center" }}>{user.name}</Text>
-          <Text style={{ paddingBottom: 5, textAlign: "center" }}>ID {userId}</Text>
+          <Text style={{ paddingBottom: 5, textAlign: "center", fontWeight: "bold", fontSize: 18 }}>{user.name}</Text>
+          <Text style={{ paddingBottom: 5, textAlign: "center", fontWeight: "bold", fontSize: 16 }}>ID {userId}</Text>
           <Text style={{ paddingBottom: 5, textAlign: "center" }}>{userId + emailDomain}</Text>
           <Text style={{ paddingBottom: 5, textAlign: "center" }}>{user.course}</Text>
           <Text style={{ paddingBottom: 20, textAlign: "center" }}>Year {user.year}</Text>

@@ -9,7 +9,7 @@ import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import auth from "@react-native-firebase/auth";
 import UserDetails from "./components/UserDetails";
-import { LogBox } from "react-native";
+import { LogBox, StyleSheet } from "react-native";
 import DataForm from "./components/DataForm";
 
 const Stack = createNativeStackNavigator(); // creates stack for navigation management
@@ -41,7 +41,7 @@ export default function App() {
         screenOptions={{
           headerMode: "screen",
           headerTintColor: "white",
-          headerStyle: { backgroundColor: "tomato" },
+          headerStyle: { backgroundColor: "navy" },
         }}
       >
         {!user ? // if already logged-in render Main, else Sign In
@@ -89,3 +89,25 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+// StyleSheet used across the application
+export const styles = StyleSheet.create({
+  textInput: {
+    borderStyle: "solid",
+    borderColor: "navy",
+    borderWidth: 1,
+    padding: 5,
+    marginVertical: 5,
+  },
+  emailDomain: {
+    borderStyle: "solid",
+    borderColor: "navy",
+    borderWidth: 1,
+    marginVertical: 5,
+    textAlignVertical: "center",
+    backgroundColor: "navy",
+    color: "white",
+    fontWeight: "bold",
+    paddingHorizontal: 5,
+  },
+});

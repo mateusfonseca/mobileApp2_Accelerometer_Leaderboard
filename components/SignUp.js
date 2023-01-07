@@ -8,6 +8,7 @@ import { Button, Text, TextInput, ToastAndroid, View } from "react-native";
 import { useState } from "react";
 import firestore from "@react-native-firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import { styles } from "../App";
 
 // Component SignUp
 export default function SignUp() {
@@ -57,19 +58,26 @@ export default function SignUp() {
     <View style={{ padding: 20, alignSelf: "center", minWidth: 300 }}>
       <View style={{ flexDirection: "row" }}>
         <TextInput
+          cursorColor={"navy"}
+          style={styles.textInput}
+          keyboardType={"numeric"}
           placeholder={"Student ID"}
           onChangeText={setId}
         />
-        <Text style={{ textAlignVertical: "center" }}>
+        <Text style={styles.emailDomain}>
           {emailDomain}
         </Text>
       </View>
       <TextInput
+        cursorColor={"navy"}
+        style={styles.textInput}
         placeholder={"Password"}
         secureTextEntry={true}
         onChangeText={setPassword}
       />
+      <Text />
       <Button
+        color={"navy"}
         title={"Sign Up"}
         onPress={() => {
           if (!id || !password || isNaN(id))

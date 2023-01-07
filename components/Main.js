@@ -112,7 +112,7 @@ export default function Main() {
         initialRouteName="Leaderboard"
         tabBarPosition="bottom"
         screenOptions={{
-          tabBarStyle: { backgroundColor: "tomato" },
+          tabBarStyle: { backgroundColor: "white" },
         }}
       >
         <Tab.Screen
@@ -120,9 +120,11 @@ export default function Main() {
           children={() => <Leaderboard value={update} />} // updates display if user details change
           initialParams={{ userId }}
           options={() => ({
+            tabBarActiveTintColor: "rgba(33, 150, 243, 1)",
+            tabBarInactiveTintColor: "rgba(0, 0, 0, 0.5)",
             tabBarLabel: "Leaderboard",
             tabBarIcon: ({ focused, color }) => {
-              color = focused ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.5)";
+              color = focused ? "rgba(33, 150, 243, 1)" : "rgba(0, 0, 0, 0.5)";
               return <MaterialCommunityIcons
                 name="format-list-numbered"
                 size={26}
@@ -133,12 +135,15 @@ export default function Main() {
         />
         <Tab.Screen
           name="Account Details"
-          children={() => <AccountDetails value={update} onChangeValue={(newValue) => setUpdate(newValue)} />} // requests update display if user details change
+          children={() => <AccountDetails value={update}
+                                          onChangeValue={(newValue) => setUpdate(newValue)} />} // requests update display if user details change
           initialParams={{ email, userId }}
           options={() => ({
+            tabBarActiveTintColor: "rgba(33, 150, 243, 1)",
+            tabBarInactiveTintColor: "rgba(0, 0, 0, 0.5)",
             tabBarLabel: "Account Details",
             tabBarIcon: ({ focused, color }) => {
-              color = focused ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.5)";
+              color = focused ? "rgba(33, 150, 243, 1)" : "rgba(0, 0, 0, 0.5)";
               return <MaterialCommunityIcons
                 name="account-details"
                 size={26}
